@@ -1,5 +1,4 @@
-import java.io.BufferedOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.*;
 import java.util.Scanner;
 
@@ -38,7 +37,7 @@ public class Mainscript {
         int userChoice = 0;
         System.out.println("Opening " + fileName + " menu...");
         System.out.println(
-                "What would you like to do with " + fileName + ": (1) Add Cards (2) Edit Cards (3) View Cards");
+                "What would you like to do with " + fileName + ":\n (1) Add Cards (2) Edit Cards (3) View Cards");
         switch (userChoice) {
             case 1:
 
@@ -61,7 +60,8 @@ public class Mainscript {
     // Makes new txt file to store subject reviewer entries
     private static void CreateNewSubjectEntry(String fileName) {
         System.out.println("Creating new Subjecy Entry named " + fileName + "...");
-        Path filePath = Paths.get(fileName + ".txt");
+        // change path to "subjects\\" + fileName + ".txt" when in windows
+        Path filePath = Paths.get("subjects//" + fileName + ".txt");
         OutputStream fileCreate = null;
         try {
             fileCreate = new BufferedOutputStream(Files.newOutputStream(filePath, StandardOpenOption.CREATE));
