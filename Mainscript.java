@@ -3,15 +3,15 @@ import java.nio.file.*;
 import java.util.Scanner;
 
 public class Mainscript {
+    static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
         System.out.println(); // remove only for nvim debugging
-        MainMenu(scanner);
+        MainMenu();
 
     }
 
-    private static void MainMenu(Scanner scanner) {
+    private static void MainMenu() {
         int userChoice = 0;
         System.out.println("What would you like to do: \n(1) List recorded subject \n(2) New Subject Entry");
         System.out.print(": ");
@@ -37,10 +37,12 @@ public class Mainscript {
         int userChoice = 0;
         System.out.println("Opening " + fileName + " menu...");
         System.out.println(
-                "What would you like to do with " + fileName + ":\n (1) Add Cards (2) Edit Cards (3) View Cards");
+                "What would you like to do with " + fileName
+                        + ":\n (1) Add Cards (2) Edit Cards (3) View Cards (4) Quiz");
+        userChoice = scanner.nextInt();
         switch (userChoice) {
             case 1:
-
+                AddCards(fileName);
                 break;
             case 2:
                 break;
@@ -50,6 +52,36 @@ public class Mainscript {
                 break;
         }
 
+    }
+
+    // TODO: add card function
+
+    // add new card entry to a subject
+    private static void AddCards(String fileName) {
+        Path filePath = Paths.get("subjects//" + fileName + ".txt");
+        boolean quit = true;
+        while (quit) {
+            String question = "", answer = "";
+            System.out.println("Enter your Question: ");
+            question = scanner.nextLine();
+            System.out.println("Enter your Answer: ");
+            answer = scanner.nextLine();
+            String quesAns = question + "}" + answer;
+            byte[] quesAnsToBytes = quesAns.getBytes();
+            OutputStream cardCreate = null;
+            try {
+                cardCreate = new BufferedOutputStream(Files.newOutputStream(filePath, StandardOpenOption.APPEND));
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(cardCreate));
+                cardCreate.write(quesAnsToBytes);
+                cardCreate.flush();
+                cardCreate.close();
+                System.out.println("Card Entry has been added...");
+            } catch (Exception e) {
+                System.out.println("Error Occured while adding new Card Entry: " + e.getMessage());
+            }
+            System.out.println("'q' to quit");
+
+        }
     }
 
     // Finds the subject if it exist
@@ -67,7 +99,7 @@ public class Mainscript {
             fileCreate = new BufferedOutputStream(Files.newOutputStream(filePath, StandardOpenOption.CREATE));
             fileCreate.flush();
             fileCreate.close();
-            System.out.println(fileName + " Subject Entry has been added.");
+            System.out.println(fileName + " Subject Entry has been added...");
         } catch (Exception e) {
             System.out.println("Error Occured while creating new Subject Entry: " + e.getMessage());
         }
